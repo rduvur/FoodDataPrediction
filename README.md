@@ -10,19 +10,13 @@ In our EDA of the food.com recipe dataset [(found here)](https://rduvur.github.i
 
 **For this project, we would like to construct a regression model that can predict a recipe's calorie count using a number of different features (# of steps/ minutes etc.).**
 
-- Model Type: 
+- Model Type: **Regression** 
 
-**Regression** 
-
-- Response Variable:
-
- **Calories**
+- Response Variable: **Calories**
 
 We chose Calories as the response variable because it is a continuous and quantitative feature that is apt for finding out how filling a meal is. In our previous analysis, we created a new feature by classifying meals as being healthy or not healthy depending on whether or not they were above 400 calories. Calories is a key part of our exploration so it only made sense to use it as our response variable.
 
-- Metric for Evaluation 
-
-**RMSE**
+- Metric for Evaluation **RMSE**
 
 Because we're looking to predict numerical values not classify, we thought using RMSE (root mean squared error) as a metric would be a good fit. It's a good choice because it greatly punishes predictions that are very different from actual values due to its squaring property. RMSE is also easily interpretable, providing a number that gives an approximation of how many units off each prediction is.
 
@@ -91,13 +85,9 @@ In our fairness analysis, we will have group X that classifies if a recipe is 'e
 
 **Our model is unfair. The RMSE for 'easy' and 'hard' recipes are different.**
 
-- Test Statistic:
+- Test Statistic: **Absolute difference in RMSE**
 
-**Absolute difference in RMSE**
-
-- Significance Level:
-
-**5%**
+- Significance Level: **5%**
 
 With a p value of 0.0, we reject the null. This implies that our model is most likely biased.
 
