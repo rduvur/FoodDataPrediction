@@ -22,7 +22,7 @@ Because we're looking to predict numerical values not classify, we thought using
 
 - Features 
 
-While considering what information would be readily available to base a guess on how many calories a recipe is, we opted to use **minutes** and **number of steps** for our baseline. These are things that could be easily found on a standard webpage detailing a recipe. These two columns are the sole features used in our baseline model, however for the final model, we added the **protein (PDV)** and **sugar (PDV)** columns. These are features that could also be found from an online recipe as well, and would be known since the recipe would have to been prepared by someone beforehand to be uploaded.
+While considering what information would be readily available to base a guess on how many calories a recipe is, we opted to use **minutes** and **number of steps** for our baseline. These are things that could be easily found on a standard webpage detailing a recipe. These two columns are the sole features used in our baseline model, however for the final model, we added the **protein (PDV)**, **sugar (PDV)**, and **total fat (PDV)** columns. These are features that could also be found from an online recipe as well, and would be known since the recipe would have to been prepared by someone beforehand to be uploaded.
 
 ## Baseline Model
 
@@ -40,7 +40,7 @@ We didn't apply any transformations (for now) as both of our features are numeri
 
 This means on average, our model is around 19 calories off the true caloric value for a given recipe. 
 
-The current model is ok, but could definitely be improved in some areas. We plotted a graph of your predicitions against their actual values and noticed a few key things. We saw a linear line indicating predictions that were perfect guesses. Under and above that line we saw many data points that were grossly under/ over-estimated. It's clear that we need more features to make a model that is better prepared to handle unseen data. A recipe could be quite intricate and take a lot of time, but may not necessarily have a lot of calories. Some of the outliers we saw we weren't too stresed over though. While doing our EDA, we noticed a lot of "troll" recipes that reported practically non-existant calories despite containing a lot of food and foods as simple in steps as hot-cocoa containing 40,000 calories. 
+The current model is ok, but could definitely be improved in some areas. We plotted a graph of your predictions against their actual values and noticed a few key things. We saw a linear line indicating predictions that were perfect guesses. Under and above that line we saw many data points that were grossly under/ over-estimated. It's clear that we need more features to make a model that is better prepared to handle unseen data. A recipe could be quite intricate and take a lot of time, but may not necessarily have a lot of calories. Some of the outliers we saw, we weren't too stressed over though. While doing our EDA, we noticed a lot of "troll" recipes that reported practically non-existant calories despite containing a lot of food, and foods as simple in steps as hot-cocoa containing 40,000 calories. 
 
 
 #### Slight Improvements
@@ -59,7 +59,7 @@ Jumping off from our baseline, we started by engineering 2 new features by **sca
 
 #### Description: 
 
-Our final model has 3 additional numeric features, Total Fat (PDV), Sugar (PDV) and Protein (PDV). We added these because there seemed to be a slight correlation between these variables and calories discovered in our EDA. Intuitively, a dish that has more of these metrics would be higher in calories as they are generally associated with bigger and/ or unhealthier foods. We included these because it wouldn't be out of the ordinary for a recipe to include sugar, fat, and protein content to be mindful of those who are health concious. LASSO Regression is special in that it has the ability to automatically nullify features deemed unecessary. The test RMSE of our final model definitely could've been improved if we added even more of the nutritional columns into the mix, but we wanted to be conservative with how many we added to be more realistic to what is available on the average recipe.
+Our final model has 3 additional numeric features, Total Fat (PDV), Sugar (PDV) and Protein (PDV). We added these because there seemed to be a slight correlation between these variables and calories discovered in our EDA. Intuitively, a dish that has more of these metrics would be higher in calories as they are generally associated with bigger and/or unhealthier foods. We included these because it wouldn't be out of the ordinary for a recipe to include sugar, fat, and protein content to be mindful of those who are health concious. LASSO Regression is special in that it has the ability to automatically nullify features deemed unnecessary. The test RMSE of our final model definitely could've been improved if we added even more of the nutritional columns into the mix, but we wanted to be conservative with how many we added to be more realistic to what is available on the average recipe.
 
 #### Tuning the Hyperparameter
 
@@ -75,7 +75,7 @@ The training/ test RMSE **improved significantly** between the baseline and fina
 
 ## Fairness Analysis
 
-In our fairness analysis, we will have group X that classifies if a recipe is 'easy' (less than 20 minutes to make)or 'hard' (more than 20 minutes to make). For our group Y, we will classify a recipe as 'healthy' if it is less than 400 calories and 'unhealthy' if it is more than 400 calories. For our evaluation metrics, we will use RMSE.
+In our fairness analysis, we will pose the question "does our final model perform better with 'easy' (5 or less steps to make) recipes than 'hard' (more than 5 steps) recipes?". To answer this question, we will first create a new column classifying a recipe as easy or hard, and shuffling them when running our permutation test. Our evaluation metric will be RMSE since our features are quantitative. Our hypotheses, test statistic, and significance level are shown below.
 
 - Null Hypothesis:
 
@@ -89,5 +89,7 @@ In our fairness analysis, we will have group X that classifies if a recipe is 'e
 
 - Significance Level: **5%**
 
-With a p value of 0.0, we reject the null. This implies that our model is most likely biased.
+After conducting our fairness analysis, we conclude that our result is statistically significant with a p-value of 0.0. Since this is less than our significance level of 0.05, we reject the null hypothesis. This implies that our model is not fair in terms of performance across the two categories - 'easy' and 'hard' recipes. The alternative hypothesis, which suggests a difference in RMSE between these categories, is supported by the data. Specifically, the observed absolute difference in RMSE is unlikely to have occured by random chance alone, providing evidence that the model's performance varies significantly between recipes classified as 'easy' and 'hard'. It is important to note that these findings are based on statistical tests and do not provide absolute proof of the model's fairness.
+
+
 
